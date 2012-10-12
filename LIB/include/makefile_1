@@ -1,0 +1,31 @@
+
+PROGRAMS = #testSolveLinearSystem #testJacobi testGaussSeidel testConjugateGradient 
+
+PROGRAMS := $(PROGRAMS) 
+
+OBJECTS = solveLinearSystem.o solveLinearSystemByIterativeMethods.o iterativeMethods.o solveLinearSystemByDirectMethods.o directMethods.o 
+
+CC = g++ 
+
+LIBS = ../lib/libMatrix.so 
+
+programs:
+	@for PROGRAM_NAME in $(PROGRAMS) ; do \
+	   make $$PROGRAM_NAME PROGRAM_NAME=$$PROGRAM_NAME; \
+	 done
+
+$(PROGRAM_NAME) : $(PROGRAM_NAME).o $(OBJECTS) 
+	    $(CC) -o $(PROGRAM_NAME) $(PROGRAM_NAME).o $(OBJECTS) $(LIBS) 
+
+lib : $(OBJECTS) 
+	$(CC) -shared $(OBJECTS) -o ../lib/libSolveLinearSystem.so 
+
+%.o : %.c 
+	$(CC) -c -o $*.o $< $(LIBS) 
+
+.PHONY : clean
+clean :
+	-rm -f $(PROGRAMS) *.o
+restart:
+	@make clean
+	@make

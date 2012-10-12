@@ -1,0 +1,29 @@
+PROGRAMS = #testMatrix 
+
+PROGRAMS := $(PROGRAMS) 
+
+OBJECTS = Matrix.o Random.o
+
+#CC = g++ -fPIC 
+CC = g++
+
+programs:
+	@for PROGRAM_NAME in $(PROGRAMS) ; do \
+	   make $$PROGRAM_NAME PROGRAM_NAME=$$PROGRAM_NAME; \
+	 done
+
+$(PROGRAM_NAME) : $(PROGRAM_NAME).o $(OBJECTS) 
+	    $(CC) -o $(PROGRAM_NAME) $(PROGRAM_NAME).o $(OBJECTS) 
+
+lib : $(OBJECTS) 
+	$(CC) -shared $(OBJECTS) -o ../lib/libMatrix.so 
+
+%.o : %.c 
+	$(CC) -c -o $*.o $<
+
+.PHONY : clean
+clean :
+	-rm -f $(PROGRAMS) *.o *.so
+restart:
+	@make clean
+	@make

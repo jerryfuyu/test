@@ -1,0 +1,31 @@
+
+PROGRAMS = #testNewtonWithDer 
+
+PROGRAMS := $(PROGRAMS) 
+
+OBJECTS = solveMultiNonlinearSystemMethods.o 
+
+LIBS = ../lib/solveLinearSystem.so ../lib/libMatrix.so
+
+CC = g++
+
+programs:
+	@for PROGRAM_NAME in $(PROGRAMS) ; do \
+	   make $$PROGRAM_NAME PROGRAM_NAME=$$PROGRAM_NAME; \
+	 done
+
+$(PROGRAM_NAME) : $(PROGRAM_NAME).o $(OBJECTS) 
+	    $(CC) -o $(PROGRAM_NAME) $(PROGRAM_NAME).o $(OBJECTS) $(LIBS)
+
+lib : $(OBJECTS) 
+	$(CC) -shared $(OBJECTS) -o ../lib/libSolveNonlinearSystem.so 
+
+%.o : %.c 
+	$(CC) -c -o $*.o $< $(LIBS)
+
+.PHONY : clean
+clean :
+	-rm -f $(PROGRAMS) *.o
+restart:
+	@make clean
+	@make
